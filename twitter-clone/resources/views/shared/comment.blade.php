@@ -1,5 +1,5 @@
 <div>
-    <form action="{{ route('idea.comment.store', $idea->id) }}" method="post">
+    <form action="{{ route('ideas.comment.store', $idea->id) }}" method="post">
         @csrf
         @method('post')
         <div class="mb-3">
@@ -9,22 +9,21 @@
             <button class="btn btn-primary btn-sm" type="submit"> Post Comment </button>
         </div>
     </form>
-    <hr>
-    @foreach ($idea->comments as $comment)
-        <div class="d-flex align-items-start">
-            <img style="width:35px" class="me-2 avatar-sm rounded-circle"
-                src="https://api.dicebear.com/6.x/fun-emoji/svg?seed=Luigi" alt="Luigi Avatar">
+    @forelse ($idea->comments as $comment)
+        <hr>
+        <div class="d-flex align-items-start mt-2">
+            <img style="width:35px" class="me-2 avatar-sm rounded-circle" src="{{ $comment->user->getUrl() }}"
+                alt="Luigi Avatar">
             <div class="w-100">
                 <div class="d-flex justify-content-between">
-                    <h6 class="">Luigi
-                    </h6>
-                    <small class="fs-6 fw-light text-muted">{{$comment->created_at}}</small>
+                    <h3 class="">{{ $comment->user->name }} </h3>
+                    <small class="fs-6 fw-light text-muted">{{ $comment->created_at }}</small>
                 </div>
                 <p class="fs-6 mt-3 fw-light">
-                    {{$comment->content}}
+                    {{ $comment->content }}
                 </p>
             </div>
         </div>
-    @endforeach
-
+    @empty
+    @endforelse
 </div>

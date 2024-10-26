@@ -11,27 +11,30 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center">
                                 <img style="width:50px" class="me-2 avatar-sm rounded-circle"
-                                    src="https://api.dicebear.com/6.x/fun-emoji/svg?seed=Mario" alt="Mario Avatar">
+                                    src="{{$idea->user->getUrl()}}" alt="{{ $idea->user->name }} Avatar">
                                 <div>
-                                    <h5 class="card-title mb-0"><a href="#"> Mario
+                                    <h5 class="card-title mb-0"><a href="{{route('users.show',$idea->user_id)}}"> {{ $idea->user->name }}
                                         </a></h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center">
-                                <form action="{{ route('idea.edit', $idea->id) }}" method="get">
-                                    <button class="btn btn-sm bg-primary me-2" style="color:aliceblue ">Edit</button>
-                                </form>
-                                <form action="{{ route('idea.destroy', $idea->id) }}" method="post">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-sm bg-danger">X</button>
-                                </form>
+                                @if (Auth::id() == $idea->user_id)
+                                        <form action="{{ route('ideas.edit', $idea->id) }}" method="get">
+                                            <button class="btn btn-sm bg-primary me-2"
+                                                style="color:aliceblue ">Edit</button>
+                                        </form>
+                                        <form action="{{ route('ideas.destroy', $idea->id) }}" method="post">
+                                            @csrf
+                                            @method('delete')
+                                            <button class="btn btn-sm bg-danger">X</button>
+                                        </form>
+                                    @endif
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
                         @if ($editing ?? false)
-                            <form action="{{ route('idea.update', $idea->id) }}" method="post">
+                            <form action="{{ route('ideas.update', $idea->id) }}" method="post">
                                 @csrf
                                 @method('put')
                                 <div class="mb-3">
@@ -42,7 +45,7 @@
                                 </div>
                                 <div class="d-flex align-items-space-between">
                                     <button class="btn btn-success me-2"> save </button>
-                                    <a class="btn btn-dark" href="{{ route('idea.show', $idea->id) }}"> cancle </a>
+                                    <a class="btn btn-dark" href="{{ route('ideas.show', $idea->id) }}"> cancle </a>
                                 </div>
                             </form>
                         @else
@@ -51,10 +54,7 @@
                             </p>
                         @endif
                         <div class="d-flex justify-content-between">
-                            <div>
-                                <a href="#" class="fw-light nav-link fs-6"> <span class="fas fa-heart me-1">
-                                    </span> {{ $idea->likes }} </a>
-                            </div>
+                            @include('ideas.shared.like')
                             <div>
                                 <span class="fs-6 fw-light text-muted"> <span class="fas fa-clock"> </span>
                                     {{ $idea->created_at }} </span>
@@ -64,9 +64,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-3">
-            @include('shared.follower-sidebar')
         </div>
     </div>
 @endsection

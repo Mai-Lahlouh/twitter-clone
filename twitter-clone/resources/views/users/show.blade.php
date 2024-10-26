@@ -5,19 +5,21 @@
         @include('shared.left-sidebar')
         <div class="col-6">
             @include('shared.success-alert')
-            @include('ideas.shared.submit')
-            <hr>
+            <div class="mt-3">
+                @include('shared.user-card')
+            </div>
             <div class="mt-3">
                 @forelse ($ideas as $idea)
                     <div class="card mt-3">
                         <div class="px-3 pt-4 pb-2">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center">
-                                    <img style="width:50px" class="me-2 avatar-sm rounded-circle"
+                                    <img style="width:40px" class="me-2 avatar-sm rounded-circle"
                                         src="{{$idea->user->getUrl()}}"
                                         alt="{{ $idea->user->name }} Avatar">
                                     <div>
-                                        <h5 class="card-title mb-0"><a href="{{route('users.show',$idea->user_id)}}"> {{ $idea->user->name }}
+                                        <h5 class="card-title mb-0"><a href="{{ route('users.show', $idea->user_id) }}">
+                                                {{ $idea->user->name }}
                                             </a></h5>
                                     </div>
                                 </div>
@@ -73,9 +75,6 @@
                     {{ $ideas->withQueryString()->links() }}
                 </div>
             </div>
-        </div>
-        <div class="col-3">
-            @include('shared.search-bar')
         </div>
     </div>
 @endsection
