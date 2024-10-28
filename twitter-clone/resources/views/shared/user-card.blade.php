@@ -11,7 +11,7 @@
                 </div>
             </div>
             @auth()
-                @if (Auth::id() === $user->id)
+                @can('update',$user)
                     <a class="btn btn-sm btn-primary" style="height: 50%"
                         href="{{ route('users.edit', $user->id) }}">Edit</a>
                 @endif
@@ -29,6 +29,8 @@
                     </span> {{ $user->ideas()->count() }} </a>
                 <a href="#" class="fw-light nav-link fs-6"> <span class="fas fa-comment me-1">
                     </span> {{ $user->comments()->count() }} </a>
+                    <a href="#" class="fw-light nav-link fs-6"> <span class="fas fa-heart me-1">
+                    </span> {{ $user->likes()->count() }} </a>
             </div>
             @auth()
                 @if (Auth::id() !== $user->id)

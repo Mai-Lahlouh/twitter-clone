@@ -3,11 +3,14 @@
 
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\dashboardController;
+use App\Http\Controllers\FeedController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\IdeaLikeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +24,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', dashboardController::class . '@index')->name('dashboard');
+Route::get('/feed', FeedController::class)->name('feed')->middleware('auth');
+
 Route::group([
     'prefix' => 'ideas/',
     'as' => 'ideas.'
@@ -57,3 +62,8 @@ Route::post('/ideas/{idea}/unlike',IdeaLikeController::class . '@unlike')->name(
 Route::get('/terms', function () {
     return view('terms');
 })->name('terms');
+
+Route::group(['middleware'=>['auth','can:admin'],'prefix'=>'/admin','as'=>'admin.'],function(){
+    Route::get('/', AdminDashboard::class . '@index')->name('dashboard');
+    Route::get('/users', AdminUserController::class . '@index')->name('users');
+});
